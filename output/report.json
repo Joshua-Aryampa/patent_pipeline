@@ -1,0 +1,149 @@
+{
+  "total_patents": 9434700,
+  "top_inventors": [
+    {
+      "name": "Shunpei Yamazaki",
+      "country": "JP",
+      "patents": 6787
+    },
+    {
+      "name": "Kia Silverbrook",
+      "country": "AU",
+      "patents": 4778
+    },
+    {
+      "name": "Tao Luo",
+      "country": "US",
+      "patents": 4490
+    },
+    {
+      "name": "Jonathan P. Ive",
+      "country": "US",
+      "patents": 2947
+    },
+    {
+      "name": "Junyi Li",
+      "country": "US",
+      "patents": 2881
+    },
+    {
+      "name": "Kangguo Cheng",
+      "country": "US",
+      "patents": 2835
+    },
+    {
+      "name": "Frederick E. Shelton, IV",
+      "country": "US",
+      "patents": 2723
+    },
+    {
+      "name": "Peter Gaal",
+      "country": "US",
+      "patents": 2554
+    },
+    {
+      "name": "Duncan Robert Kerr",
+      "country": "US",
+      "patents": 2534
+    },
+    {
+      "name": "Bartley K. Andre",
+      "country": "US",
+      "patents": 2478
+    }
+  ],
+  "top_companies": [
+    {
+      "name": "SAMSUNG DISPLAY CO., LTD.",
+      "patents": 174536
+    },
+    {
+      "name": "International Business Machines Corporation",
+      "patents": 164083
+    },
+    {
+      "name": "CANON KABUSHIKI KAISHA",
+      "patents": 91331
+    },
+    {
+      "name": "SONY GROUP CORPORATION",
+      "patents": 62911
+    },
+    {
+      "name": "Fujitsu Limited",
+      "patents": 56343
+    },
+    {
+      "name": "Kabushiki Kaisha Toshiba",
+      "patents": 53607
+    },
+    {
+      "name": "Intel Corporation",
+      "patents": 53219
+    },
+    {
+      "name": "General Electric Company",
+      "patents": 52043
+    },
+    {
+      "name": "LG ELECTRONICS INC.",
+      "patents": 50000
+    },
+    {
+      "name": "HITACHI, LTD.",
+      "patents": 46073
+    }
+  ],
+  "top_countries": [
+    {
+      "country": "US",
+      "patents": 5152230,
+      "share": 54.61
+    },
+    {
+      "country": "JP",
+      "patents": 1596388,
+      "share": 16.92
+    },
+    {
+      "country": "DE",
+      "patents": 632808,
+      "share": 6.71
+    },
+    {
+      "country": "CN",
+      "patents": 503914,
+      "share": 5.34
+    },
+    {
+      "country": "KR",
+      "patents": 441161,
+      "share": 4.68
+    },
+    {
+      "country": "TW",
+      "patents": 326572,
+      "share": 3.46
+    },
+    {
+      "country": "GB",
+      "patents": 295191,
+      "share": 3.13
+    },
+    {
+      "country": "CA",
+      "patents": 268412,
+      "share": 2.84
+    },
+    {
+      "country": "FR",
+      "patents": 253366,
+      "share": 2.69
+    },
+    {
+      "country": "CH",
+      "patents": 122076,
+      "share": 1.29
+    }
+  ]
+}
