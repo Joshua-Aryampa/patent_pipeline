@@ -4,6 +4,8 @@ A full data engineering pipeline that collects, cleans, stores, and analyzes
 real-world USPTO patent data from the PatentsView Granted Patent Disambiguated
 dataset. Built as part of a big data course project.
 
+🌐 **Live Dashboard:** [patentpipeline.streamlit.app](https://patentpipeline.streamlit.app/)
+
 ---
 
 ## What This Pipeline Does
@@ -11,13 +13,17 @@ dataset. Built as part of a big data course project.
 ```
 Raw TSV Files (USPTO PatentsView)
         ↓
-scripts/clean.py      — Cleans and structures the raw data into CSVs
+notebooks/01_data_profile.ipynb  — Full data profiling before any cleaning decisions
+        ↓
+scripts/clean.py      — Two-phase chunked data cleaner
         ↓
 scripts/load_db.py    — Loads clean CSVs into a SQLite database
         ↓
 scripts/queries.py    — Runs 7 analytical SQL queries
         ↓
 scripts/reports.py    — Generates console report, CSVs, and JSON
+        ↓
+dashboard.py          — Interactive Streamlit dashboard with insights
 ```
 
 ---
@@ -44,6 +50,29 @@ scripts/reports.py    — Generates console report, CSVs, and JSON
 | Q5 | JOIN across patents, inventors, and companies |
 | Q6 | CTE — country patent growth from 1990s to 2010s |
 | Q7 | Window function — top 3 inventors ranked within each country |
+
+---
+
+## Dashboard & Insights
+
+The project includes a fully deployed interactive Streamlit dashboard with two pages:
+
+**Dashboard page:**
+- Key metrics — total patents, top inventor, top company, top country
+- Patent grants over time (area chart, 1976–2025)
+- Top 20 inventors by patent count, coloured by country
+- Top 20 companies by patent count
+- World map of patents by country
+- Country share pie chart
+- Expandable raw data tables
+
+**Insights & Analysis page** — five data-driven insights with charts, numbers, and interpretations:
+
+1. **The 1970s Inflection Point** — why patent grants exploded in that decade and what it tells us about IP as a corporate strategy
+2. **US Dominance — Commanding but Slowly Eroding** — the US holds 54.61% of all patents but Asia is closing the gap fast
+3. **Peak Innovation? The Post-2019 Decline** — two competing explanations: data processing lag vs genuine slowdown
+4. **The Prolific Inventor Phenomenon** — why Shunpei Yamazaki's 6,787 patents says more about institutional strategy than individual genius
+5. **East Asia's Strategic Patent Buildout** — how state industrial policy drove one of the biggest transfers of technological leverage in history
 
 ---
 
@@ -76,6 +105,7 @@ patent_pipeline/
 │   └── reports.py                  ← Console, CSV, and JSON report generator
 ├── sql/
 │   └── schema.sql                  ← Database schema and indexes
+├── dashboard.py                    ← Streamlit dashboard (deployed)
 ├── main.py                         ← Runs the full pipeline end to end
 └── requirements.txt
 ```
@@ -87,7 +117,7 @@ patent_pipeline/
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Joshua-Aryampa/patent_pipeline.git
 cd patent_pipeline
 ```
 
@@ -144,6 +174,12 @@ python scripts/queries.py    # Run SQL queries only
 python scripts/reports.py    # Generate reports only
 ```
 
+### 7. Run the dashboard locally
+
+```bash
+streamlit run dashboard.py
+```
+
 ---
 
 ## Data Source
@@ -152,7 +188,7 @@ python scripts/reports.py    # Generate reports only
 - Provider: USPTO Open Data Portal
 - URL: https://data.uspto.gov/bulkdata/datasets/pvgpatdis
 - Coverage: US granted patents from 1976 to present
-- Reference: PV_grant_data_dictionary.pdf (included in repo)
+- Reference: PV_grant_data_dictionary.pdf
 
 ---
 
@@ -169,15 +205,13 @@ python scripts/reports.py    # Generate reports only
 
 ## Technical Notes
 
-- All large files are processed in chunks of 200,000 rows to manage memory
-- The abstract file uses Python engine + `csv.QUOTE_NONE` due to unescaped
-  quotes and very long lines exceeding the C parser buffer
-- Dates with impossible years (before 1836) are nullified — confirmed data
-  entry errors in old records (e.g. 1074, 1298 found in profiling)
-- SQLite indexes are dropped before bulk relationship inserts and rebuilt
-  afterwards for significantly faster load performance
-- `latin-1` encoding used throughout — patent data contains multilingual
-  inventor names that break UTF-8
+- All large files are processed in chunks of 200,000 rows to manage memory — no single file is ever fully loaded into RAM
+- The cleaning pipeline runs in two phases: Phase 1 cleans each file independently in chunks; Phase 2 merges the clean intermediates into final output tables
+- The abstract file (`g_patent_abstract.tsv`) requires the Python parser engine and `csv.QUOTE_NONE` due to buffer overflow on very long abstract text and unescaped quote characters inside the text
+- Dates with impossible years (before 1836) are nullified — confirmed data entry errors found during profiling (e.g. 1074, 1298)
+- SQLite indexes are dropped before bulk relationship inserts and rebuilt afterwards — significantly faster than maintaining indexes across 25M row-by-row inserts
+- `latin-1` encoding used throughout — patent data contains multilingual inventor names that break UTF-8
+- The dashboard reads entirely from pre-computed CSVs in `output/` — no database queries at runtime, loads in seconds
 
 ---
 
@@ -187,6 +221,8 @@ python scripts/reports.py    # Generate reports only
 |---|---|
 | pandas | Data cleaning and transformation |
 | sqlite3 | Database storage and queries (built into Python) |
-| jupyter | Data profiling notebook |
-| requests | HTTP downloads |
+| streamlit | Interactive dashboard |
+| plotly | Charts and visualizations |
+| pycountry | ISO-2 to ISO-3 country code conversion for world map |
+| requests | HTTP utilities |
 | tqdm | Progress bars |
